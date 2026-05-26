@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ta">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/catering.png">
+    <title>Samiyar-Catering-Bill</title>
+
+    <style>
+        a {
+            text-decoration: none;
+            color: blueviolet;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif
+        }
+
+        body {
+            background: #f3f4f6;
+            padding: 20px
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto
+        }
+
+        /* Devotional & Premium Bill Header styles matching handwritten layout */
+        .bill-header {
+            color: #111827;
+            padding: 10px 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .header-top-devotional {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .devotional-line {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e3a8a;
+            /* Royal blue for devotional lines */
+            margin: 3px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .header-main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-left {
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .header-left .owner-name {
+            font-size: 18px;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .header-left p {
+            margin: 2px 0;
+        }
+
+        .header-center {
+            text-align: center;
+        }
+
+        .header-logo {
+            max-height: 110px;
+            width: auto;
+            margin-bottom: 6px;
+            object-fit: contain;
+        }
+
+        .header-center .main-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #111827;
+            margin: 4px 0 2px 0;
+            letter-spacing: -0.5px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-center .sub-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #4b5563;
+            margin: 0;
+        }
+
+        .header-right {
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .header-right .meal-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 8px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .header-right .meal-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-weight: 700;
+            color: #0f766e;
+            /* Teal meal badges */
+            background: #f0fdf4;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #dcfce7;
+            font-size: 13px;
+            width: 190px;
+            box-sizing: border-box;
+        }
+
+        .meal-count-input {
+            width: 50px !important;
+            height: 22px !important;
+            padding: 2px !important;
+            border: 1px solid #0f766e !important;
+            border-radius: 4px !important;
+            font-size: 12px !important;
+            text-align: center !important;
+            color: #0f766e !important;
+            background: white !important;
+            font-weight: bold !important;
+        }
+
+        .header-right .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .header-right .contact-info a {
+            color: #2563eb;
+            transition: color 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .header-right .contact-info a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .header-divider {
+            border: 0;
+            border-top: 3px double #111827;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        /* Mobile & Responsive header styling */
+        @media(max-width:768px) {
+            .header-main-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header-left,
+            .header-right {
+                text-align: center;
+            }
+
+            .header-right .meal-list {
+                align-items: center;
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .header-right .contact-info {
+                align-items: center;
+                flex-direction: row;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 8px;
+            }
+
+            .header-center .main-title {
+                font-size: 28px;
+            }
+
+            .devotional-line {
+                font-size: 14px;
+            }
+        }
+
+        .details,
+        .bill-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: fixed
+        }
+
+        th {
+            background: #111827;
+            color: white
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            word-break: break-word
+        }
+
+        td:nth-child(2) {
+            text-align: left;
+            font-weight: bold
+        }
+
+        table input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 8%
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 44%
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 16%
+        }
+
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 16%
+        }
+
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 16%
+        }
+
+        .group-title {
+            background: #dbeafe;
+            font-weight: bold;
+            font-size: 17px;
+            color: #111827
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer
+        }
+
+        .clear-btn {
+            background: #dc2626
+        }
+
+        footer {
+            margin-top: 30px;
+            color: #4b5563;
+            padding: 20px 10px;
+            text-align: center
+        }
+
+        footer a {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .print-only-value {
+            display: none;
+        }
+
+        @media(max-width:768px) {
+            body {
+                padding: 10px
+            }
+
+            .details,
+            .bill-section {
+                padding: 12px;
+                border-radius: 10px
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 12px
+            }
+
+            header {
+                padding: 18px 12px;
+                margin-bottom: 15px;
+            }
+
+            .header-logo {
+                max-height: 90px;
+                margin-bottom: 10px;
+            }
+
+            header h1 {
+                font-size: 26px
+            }
+
+            header p {
+                font-size: 15px
+            }
+
+            .contact-info {
+                font-size: 14px;
+                gap: 12px
+            }
+
+            table {
+                font-size: 12px
+            }
+
+            th,
+            td {
+                padding: 6px 3px
+            }
+
+            table input {
+                padding: 4px 2px;
+                font-size: 12px;
+                border-radius: 4px;
+                height: 28px
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px
+            }
+
+            .buttons button {
+                width: 100%;
+                padding: 12px;
+                font-size: 15px
+            }
+        }
+
+        @media(max-width:480px) {
+            header h1 {
+                font-size: 22px
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 6px;
+                align-items: center
+            }
+
+            th:nth-child(1),
+            td:nth-child(1) {
+                width: 10%
+            }
+
+            th:nth-child(2),
+            td:nth-child(2) {
+                width: 42%
+            }
+
+            th:nth-child(3),
+            td:nth-child(3) {
+                width: 16%
+            }
+
+            th:nth-child(4),
+            td:nth-child(4) {
+                width: 16%
+            }
+
+            th:nth-child(5),
+            td:nth-child(5) {
+                width: 16%
+            }
+        }
+
+        @media print {
+            .print-only-value {
+                display: inline-block !important;
+                font-weight: bold !important;
+            }
+
+            .print-hidden {
+                display: none !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .container {
+                box-shadow: none !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+
+            .details,
+            .bill-section {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin-bottom: 15px !important;
+                overflow-x: visible !important;
+            }
+
+            tr {
+                page-break-inside: avoid !important;
+            }
+
+            .empty-row,
+            .empty-group {
+                display: none !important;
+            }
+
+            .bill-header {
+                padding: 5px 0 !important;
+                margin-bottom: 5px !important;
+            }
+
+            .header-main-grid {
+                display: grid !important;
+                grid-template-columns: 1fr 2fr 1fr !important;
+                gap: 15px !important;
+                align-items: center !important;
+            }
+
+            .devotional-line {
+                color: #000 !important;
+            }
+
+            .header-right .meal-list li {
+                color: #000 !important;
+                background: transparent !important;
+                border: 1px solid #ccc !important;
+            }
+
+            footer {
+                margin-top: 15px !important;
+                padding: 10px 0 !important;
+            }
+
+            input,
+            table input {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                font-size: 14px !important;
+                text-align: center !important;
+                height: auto !important;
+            }
+
+            #customer {
+                text-align: left !important;
+                font-weight: bold !important;
+                font-size: 16px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="billArea">
+
+        <header class="bill-header">
+            <!-- Top Devotional Texts (Centered) -->
+            <div class="header-top-devotional">
+                <p class="devotional-line">திருஅருள்உள்ள மகாகணபதி துணை</p>
+                <p class="devotional-line">ஸ்ரீ பட்டினங்காத்தம்மன் துணை</p>
+            </div>
+
+            <!-- Main Header Grid -->
+            <div class="header-main-grid">
+                <!-- Left Side: Owner and Location Info -->
+                <div class="header-left">
+                    <p class="owner-name"><strong>J.R. மாதவன்</strong></p>
+                    <p class="owner-mono">
+                    <div class="contact-info">
+                        <span>📞 <a href="tel:9788473657">9788473657</a></span><br>
+                        <span>📞 <a href="tel:9787900621">9787900621</a></span>
+                    </div>
+                    </p>
+                    <p class="owner-location">நாயுடுமங்கலம்</p>
+                    <p class="owner-district">தி.மலை மாவட்டம் - 606 802</p>
+                </div>
+
+                <!-- Center: Logo and Service Name -->
+                <div class="header-center">
+                    <img src="/samiyarlogo.png" alt="சாமியார் கேட்டரிங் சர்வீஸ் லோகோ" class="header-logo">
+                    <h1 class="main-title">சாமியார் கேட்டரிங் சர்வீஸ்</h1>
+                    <p class="sub-title">நாயுடுமங்கலம்.</p>
+                </div>
+
+                <!-- Right Side: Meal Types and Contact Info -->
+                <div class="header-right">
+                    <ul class="meal-list">
+                        <li>
+                            <span>காலை டிபன்</span>
+                            <input type="number" placeholder="0" class="meal-count-input">
+                        </li>
+                        <li>
+                            <span>மதிய சாப்பாடு</span>
+                            <input type="number" placeholder="0" class="meal-count-input">
+                        </li>
+                        <li>
+                            <span>இரவு டிபன்</span>
+                            <input type="number" placeholder="0" class="meal-count-input">
+                        </li>
+                        <li>
+                            <span>இரவு சாப்பாடு</span>
+                            <input type="number" placeholder="0" class="meal-count-input">
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <hr class="header-divider">
+        </header>
+
+        <section class="details">
+            <div class="detail-grid">
+                <div>
+                    <label>வாடிக்கையாளர் பெயர்</label>
+                    <input type="text" id="customer" placeholder="பெயர்">
+                </div>
+
+                <div>
+                    <label>தேதி</label>
+                    <input type="date" id="date">
+                </div>
+            </div>
+        </section>
+
+        <section class="bill-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Product Name</th>
+                        <th>Kg</th>
+                        <th>Gram</th>
+                        <th>Number</th>
+                    </tr>
+                </thead>
+                <tbody id="productTable"></tbody>
+            </table>
+        </section>
+
+        <div class="buttons no-print">
+            <button onclick="window.print()">PDF Download</button>
+            <button class="clear-btn" onclick="clearAll()">Clear</button>
+        </div>
+
+        <footer>
+            <p>© 2026 சாமியார் கேட்டரிங் சர்வீஸ் <a href="https://zynkcodesolution.vercel.app/" target="blank">Designed
+                    By ZYNK Code
+                    Solutions</a></p>
+        </footer>
+
+    </div>
+
+
+
+    <script>
+        document.getElementById("date").valueAsDate = new Date();
+
+        const productGroups = {
+            "மளிகை பொருட்கள்": [
+                "மஞ்சள் தூள் (₹5)",
+                "குங்குமம் (₹5)",
+                "கற்பூரம் (₹5)",
+                "வெற்றிலை பாக்கு (₹5)",
+                "சாக்கரை",
+                "பச்சை அரிசி",
+                "புழுங்கல் அரிசி (வெள்ளைப்பொன்னி)",
+                "இட்லி அரிசி",
+                "பிரியாணி அரிசி (Bullet)",
+                "துவரம் பருப்பு",
+                "கடலை பருப்பு",
+                "கடலை மாவு (அரவு)",
+                "உளுந்தம் பருப்பு",
+                "பயத்தம் பருப்பு",
+                "மிளகாய் (குண்டு)",
+                "தனியா",
+                "மிளகாய்தூள் (தனி)(சக்தி)",
+                "குழம்பு மிளகாய் தூள் (ஆச்சி)",
+                "தனியாதூள் (சக்தி)",
+                "மஞ்சள்தூள் (சக்தி)",
+                "மிளகு",
+                "மிளகு தூள்",
+                "சீரகம்",
+                "வடவம்",
+                "கடுகு",
+                "வெந்தயம்",
+                "L.G பெருங்காயம் (கட்டி)",
+                "L.G பெருங்காயம் (தூள்)",
+                "ப.பட்டாணி",
+                "மூக்கு கடலை (வெள்ளை)",
+                "பழைய புளி",
+                "புது புளி (வெள்ளை)",
+                "கல் உப்பு",
+                "டேபிள் சால்ட்",
+                "பருப்பு சோடா",
+                "பொட்டு கடலை",
+                "முந்திரி",
+                "திராட்சை",
+                "எலக்காய்",
+                "ரோஸ் எசன்ஸ்",
+                "பைனாப்பிள் எசன்ஸ்",
+                "லெமன் பவுடர்",
+                "ஆப்பிள் கிரீன்",
+                "ஆரஞ்சு பவுடர்",
+                "கேசரி பவுடர்",
+                "சாக்லேட் பவுடர்",
+                "சர பருப்பு",
+                "வெள்ளரி விதை",
+                "காபி தூள்",
+                "டீ தூள்",
+                "அப்பளம் (பாப்புலர்)",
+                "சிப்ஸ் அப்பளம்",
+                "பம்பாய் ரவை",
+                "மைதா",
+                "கோதுமை மாவு",
+                "அரிசி மாவு",
+                "டால்டா",
+                "ரிஃபைன் ஆயில் (SVS)",
+                "தேங்காய் எண்ணெய்",
+                "கடலை எண்ணெய்",
+                "நல்லெண்ணெய்",
+                "பனங்கற்கண்டு",
+                "நெய் (RKG)",
+                "ஜவ்வரிசி (சிறியது)",
+                "ஜவ்வரிசி (பெரியது)",
+                "சேமியா",
+                "வெல்லம்",
+                "பிரியாணி இலை",
+                "பட்டை",
+                "லவங்கம்",
+                "சோம்பு",
+                "அன்னாசி பூ",
+                "கஸ்தூரி மேத்தி",
+                "ஜாதிப்பத்திரி",
+                "மராட்டி சுக்கு",
+                "அஜினோமோட்டோ",
+                "காண்பிளவர் பவுடர்",
+                "ஜாதிக்காய்",
+                "மில்மேக்கர் (சிறியது)",
+                "பூண்டு",
+                "மந்தக்காளி வத்தல்",
+                "சுண்டக்காய் வத்தல்",
+                "பாதாம் பருப்பு",
+                "பிஸ்தா பருப்பு",
+                "வெள்ளை மொச்சைக்கொட்டை",
+                "கடலை",
+                "பிரட்",
+                "லெமன் சால்ட்",
+                "மாஸ் பவுடர்",
+                "மில்க் மேட்",
+                "எள்ளு (வெள்ளை)",
+                "காராமணி",
+                "கசகசா",
+                "சர்க்கரை இல்லா பால்கோவா",
+                "சபீனா",
+                "சோப்",
+                "பிரியாணி மசாலா",
+                "சிக்கன் மசாலா",
+                "மட்டன் மசாலா"
+            ],
+
+            "பழ வகைகள்": [
+                "மஞ்சள் வாழைப்பழம்",
+                "பச்சை வாழைப்பழம்",
+                "ஆப்பிள்",
+                "அன்னாசிப்பழம்",
+                "செர்ரிப்பழம்",
+                "பச்சை பன்னீர் திராட்சை (சிறியது)",
+                "காபூல் திராட்சை",
+                "பேரிச்சம்பழம்",
+                "பப்பாளி செட்",
+                "மாதுளம் பழம்"
+            ],
+
+            "காய்கறி வகைகள்": [
+                "கத்தரிக் காய் முள்ளு",
+                "முருங்கைக் காய்",
+                "உருளைக்கிழங்கு",
+                "வாழைக் காய்",
+                "கோஸ்",
+                "பீன்ஸ்",
+                "டபுள் பீன்ஸ்",
+                "அவரைக்காய்",
+                "கேரட்",
+                "நூக்கல்",
+                "காளிஃபிளவர்",
+                "பச்சைப் பட்டாணி",
+                "பீர்க்கங்காய்",
+                "கருணை கிழங்கு",
+                "சேப்பங் கிழங்கு",
+                "எலுமிச்சம் பழம்",
+                "மாங்காய்",
+                "கீரைக்காய்",
+                "பாகற்காய்",
+                "இஞ்சி",
+                "வெண்டைக்காய்",
+                "பச்சை மிளகாய்",
+                "குடை மிளகாய்",
+                "புடலங்காய்",
+                "செளசெள",
+                "கொத்தவரங்காய்",
+                "சிகப்பு பூசணி",
+                "வெள்ளை பூசணி",
+                "தக்காளி",
+                "வெங்காயம் (பெரியது)",
+                "சாம்பார் வெங்காயம் (சிரியது)",
+                "பீட்ரூட்",
+                "புதினா",
+                "கொத்தமல்லி",
+                "கருவேப்பிலை",
+                "பொள்ளாச்சி தேங்காய் (பழையது)",
+                "பால்",
+                "தயிர்",
+                "டிபன் இலை",
+                "சாப்பாடு இலை",
+                "வாட்டர் கப் & டீக் கப்"
+            ],
+
+            "வாட்டர் கேன் & கப்": [
+                "20 லிட்டர் தண்ணீர் கேன்",
+                "500 மில்லி தண்ணீர் கேன்"
+            ],
+
+            "சமையலுக்கு தேவையானவை": [
+                "விறகு அடுப்பு",
+                "சிலிண்டர்",
+                "காடா துணி",
+                "மிக்ஸி",
+                "நியூஸ் பேப்பர்",
+                "கேஸ் அடுப்பு-1",
+                "கேஸ் அடுப்பு-2",
+                "தீப்பெட்டி",
+                "எட்டு முழ வேட்டி",
+                "டீ டிரம்",
+                "கை துண்டு",
+                "25 படி டபரா",
+                "20 படி டபரா",
+                "15 படி டபரா",
+                "10 படி டபரா",
+                "8 படி டபரா",
+                "5 படி டபரா",
+                "இட்லி பானை",
+                "வாணல்",
+                "ஜல்லி ",
+                "துடுப்பு",
+                "வடி கூடை (பெரியது)",
+                "வால் கிண்ணம்",
+                "கூட்டி கிண்ணம்",
+                "சில்வர் அன்னக் கூடை",
+                "பேசன்",
+                "அன்னக்குத்தி",
+                "பக்கெட",
+                "கரண்டி",
+                "ஜக்கு"
+            ]
+        };
+
+        function loadProducts() {
+            const table = document.getElementById("productTable");
+            table.innerHTML = "";
+            let count = 1;
+
+            for (const group in productGroups) {
+                table.innerHTML += `
+<tr class="group-title" data-group="${group}">
+<td colspan="5">${group}</td>
+</tr>`;
+
+                productGroups[group].forEach(product => {
+                    table.innerHTML += `
+<tr class="product-row" data-group="${group}">
+<td>${count++}</td>
+<td>${product}</td>
+<td><input type="number" placeholder="Kg"></td>
+<td><input type="number" placeholder="Gram"></td>
+<td><input type="number" placeholder="Number"></td>
+</tr>`;
+                });
+            }
+        }
+
+        function preparePDF() {
+            const allRows = document.querySelectorAll(".product-row");
+            let totalFilled = 0;
+
+            // Check if there is at least one filled input in the entire list
+            allRows.forEach(row => {
+                const inputs = row.querySelectorAll("input");
+                let kg = inputs[0].value;
+                let gram = inputs[1].value;
+                let number = inputs[2].value;
+                if (kg !== "" || gram !== "" || number !== "") {
+                    totalFilled++;
+                }
+            });
+
+            allRows.forEach(row => {
+                const inputs = row.querySelectorAll("input");
+                let kg = inputs[0].value;
+                let gram = inputs[1].value;
+                let number = inputs[2].value;
+
+                if (totalFilled === 0) {
+                    // Blank checklist mode: keep all rows visible
+                    row.classList.remove("empty-row");
+                } else {
+                    // Invoice mode: hide empty rows
+                    if (kg === "" && gram === "" && number === "") {
+                        row.classList.add("empty-row");
+                    } else {
+                        if (kg === "") inputs[0].value = "0";
+                        if (gram === "") inputs[1].value = "0";
+                        if (number === "") inputs[2].value = "0";
+                        row.classList.remove("empty-row");
+                    }
+                }
+            });
+
+            document.querySelectorAll(".group-title").forEach(groupRow => {
+                const groupName = groupRow.getAttribute("data-group");
+                const groupItems = document.querySelectorAll(`.product-row[data-group="${groupName}"]`);
+                let hasItem = false;
+
+                groupItems.forEach(item => {
+                    if (!item.classList.contains("empty-row")) {
+                        hasItem = true;
+                    }
+                });
+
+                if (totalFilled === 0) {
+                    // Blank checklist mode: keep all categories visible
+                    groupRow.classList.remove("empty-group");
+                } else {
+                    // Invoice mode: hide empty categories
+                    if (!hasItem) {
+                        groupRow.classList.add("empty-group");
+                    } else {
+                        groupRow.classList.remove("empty-group");
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('beforeprint', () => {
+            preparePDF();
+
+            // Hide empty meal badges if no value is entered
+            document.querySelectorAll(".meal-list li").forEach(li => {
+                const input = li.querySelector(".meal-count-input");
+                if (input && !input.value) {
+                    li.classList.add("print-hidden");
+                }
+            });
+
+            // Replace input fields with temporary span elements for clean printing without widget outlines/date arrows
+            document.querySelectorAll("#billArea input").forEach(input => {
+                let displayVal = input.value;
+                if (input.type === 'date' && displayVal) {
+                    const parts = displayVal.split('-');
+                    if (parts.length === 3) {
+                        displayVal = `${parts[2]}/${parts[1]}/${parts[0]}`; // Formats YYYY-MM-DD to DD/MM/YYYY
+                    }
+                }
+
+                const span = document.createElement("span");
+                span.className = "print-only-value";
+
+                if (input.id === 'customer' && !displayVal) {
+                    span.textContent = ""; // Hide empty customer name placeholder entirely
+                } else {
+                    span.textContent = displayVal || "";
+                }
+
+                input.classList.add("print-hidden");
+                input.parentNode.insertBefore(span, input.nextSibling);
+            });
+        });
+
+        window.addEventListener('afterprint', () => {
+            // Clean up print-only spans and restore original input fields
+            document.querySelectorAll("#billArea .print-only-value").forEach(span => span.remove());
+            document.querySelectorAll("#billArea input").forEach(input => {
+                input.classList.remove("print-hidden");
+            });
+            // Restore meal badges
+            document.querySelectorAll(".meal-list li").forEach(li => {
+                li.classList.remove("print-hidden");
+            });
+        });
+
+        function clearAll() {
+            document.querySelectorAll("tbody input, .meal-count-input").forEach(input => input.value = "");
+            document.getElementById("customer").value = "";
+            document.getElementById("date").valueAsDate = new Date();
+        }
+
+        loadProducts();
+    </script>
+
+</body>
+
+</html>
